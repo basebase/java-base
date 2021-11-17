@@ -144,7 +144,7 @@ if (可用余额大于等于取款金额) {
 
 假设可用余额为100元, 取出金额为100元, 现在有线程A和线程B同时执行
 
-![两个线程同时执行](###)
+![两个线程同时执行](https://github.com/basebase/java-base/blob/master/src/main/java/cn/xmy/base/ch01/%E4%B8%A4%E4%B8%AA%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%97%B6%E6%89%A7%E8%A1%8C.png?raw=true)
 
 线程A和线程B同时执行, 有时线程B的处理可能会插在线程A的 "可用余额确认" 和 "从可用余额上减去取款金额" 这两个处理之间。
 
