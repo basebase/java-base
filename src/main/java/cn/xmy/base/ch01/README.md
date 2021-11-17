@@ -44,3 +44,68 @@
 start方法主要做了两件事:
 1. 启动新线程
 2. 调用run方法
+
+```java
+public class Main {
+   public static void main(String[] args) {
+      Thread t = new MyThread();
+      // 主线程启动一个新线程
+      t.start();
+      for (int i = 0; i < 100; i++) {
+         //...
+      }
+   }
+}
+```
+
+通过这个例子, 我们启动一个新的线程, 可以是循环输出也可以是其它计算操作, 由于程序是并发执行的, 所以结果或许是交织在一起输出, 计算可能会出错。对于这些问题
+我们会在后面继续介绍与学习。
+
+#### 启动线程
+启动线程的方式有两种:
+1. 继承Thread类
+2. 实现Runnable接口
+
+
+##### 通过Thread启动线程
+```java
+
+public class Main2 {
+    public static void main(String[] args) {
+        PrintThread t1 = new PrintThread();
+        PrintThread t2 = new PrintThread("H1");
+        // 只有调用start方法才算是启动一个线程
+        t2.start();
+        t1.setMessage("H@");
+//        t1.start();
+    }
+}
+```
+上面这个例子通过继承Thread类实现动态输出传入的字符串内容, 我们创建两个线程对象实例, 并调用其中一个对象实例的start方法, 程序最终只会输出"H1"
+因为***创建对象(PrintThread)实例和启动对象实例线程***是两个不同的处理。也就是说即使创建了实例, 但是如果不去调用执行start方法, 线程依旧不会被启动。
+
+有一个点需要注意的是: PrintThread实例和线程不是同一个东西。即使创建了PrintThread实例, 线程也不会启动, 而且就算线程终止了, PrintThread实例也不会立即消失。
+
+主线程在main方法中启动两个线程, 随后main方法结束, 主线程也随之终止。但是整个程序并不会终止, 因为启动的线程在执行完成之前是不会终止的。
+直到所有的线程都终止后, 程序才会终止。也就是说, 当我们启动的线程结束, 程序才会终止。
+
+##### 通过Runnable启动线程
+
+```java
+public class Printer implements Runnable {
+   public void run() { /*...*/ }
+}
+public class Main3 {
+   public static void main(String[] args) {
+      Printer p = new Printer("msg");
+      // 使用Thread包装后启动
+      Thread t1 = new Thread(p);
+      t1.start();
+   }
+}
+```
+
+我们只需要实现Runnable接口并实现run方法即可, 但是实现Runnable接口并没有继承Thread类的start方法只有一个run方法, 这是无法启动一个线程的, 
+所有我么还需要创建Thread类并将实现Runnable接口实例对象传入, 然后再调用start方法, 这就是利用Runnable接口实现线程启动的方法。
+
+***不管是继承Thread类还是实现Runnable接口, 想要启动一个新线程最终都是使用Thread类的start方法***
