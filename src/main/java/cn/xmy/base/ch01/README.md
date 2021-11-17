@@ -109,3 +109,22 @@ public class Main3 {
 所有我么还需要创建Thread类并将实现Runnable接口实例对象传入, 然后再调用start方法, 这就是利用Runnable接口实现线程启动的方法。
 
 ***不管是继承Thread类还是实现Runnable接口, 想要启动一个新线程最终都是使用Thread类的start方法***
+
+#### 线程暂停
+我们可以通过Thread类中的sleep方法让线程进行休眠, sleep方法是一个静态方法。sleep方法方法的调用放在了try...catch中, 这是因为sleep方法可能会抛出
+InterruptedException异常。InterruptedException异常能够取消线程的处理(后面会详解)
+
+sleep实际生产中频率不会使用太多, 毕竟没有任何人希望等待很长时间, 但也有一些场景可以使用, 比如游戏结束给定一个时间不继续就退出程序。
+```java
+public class Main4 {
+    public static void main(String[] args) {
+        for (int i = 0; i < 10; i++) {
+            System.out.println("main");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+            }
+        }
+    }
+}
+```
