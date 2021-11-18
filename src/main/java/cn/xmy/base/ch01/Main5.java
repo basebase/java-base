@@ -3,7 +3,7 @@ package cn.xmy.base.ch01;
 /**
  * @Author xiaomoyu
  * @Date: 2021/11/18 11:06:20
- * @Description:    多个线程同事操作一段代码, 无互斥下产生预期外效果
+ * @Description:    多个线程同一时段操作一段代码, 无互斥下产生预期外效果
  */
 public class Main5 {
 
