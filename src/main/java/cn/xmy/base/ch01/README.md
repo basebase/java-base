@@ -159,3 +159,76 @@ if (可用余额大于等于取款金额) {
 
 ***这种方法被称为synchronized方法, 有时也称之为同步方法***
 
+```java
+public class Bank {
+    private int amount;
+    private String name;
+    
+    public String getName() {
+        return name;
+    }
+
+    // 存款, 添加synchronized关键字, 形成线程之间的互斥 
+    public synchronized void deposit(int m) {
+        amount += m;
+    }
+
+    // 取款, 添加synchronized关键字, 线程进行互斥
+    public synchronized boolean withdraw(int m) {
+        if (amount >= m) {
+            amount -= m;
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+public class BankThread extends Thread {
+    @Override
+    public void run() {
+        bank.deposit(m);
+        boolean trak = bank.withdraw(m);
+        int amount = bank.getAmount();
+    }
+}
+
+public class Main6 {
+    public static void main(String[] args) {
+        Bank bank = new Bank(0, "zs");
+
+        Thread[] threads = new Thread[20];
+        for (int i = 0; i < 10; i++) {
+            BankThread thread = new BankThread(bank, (i <= 0 ? (i + 1) : i) * 5);
+            threads[i] = thread;
+        }
+
+        for (int i = 0; i < 10; i++) {
+            threads[i].start();
+        }
+    }
+}
+```
+
+上面例子中Bank类deposit(存款)和withdraw(取款)两个方法都是synchronized(同步)方法。
+
+如果已经有一个线程正在执行Bank实例中的deposit或者withdraw方法, 那么其它线程就无法执行Bank实例中的deposit和withdraw
+方法, 需要排队等待。
+
+Bank类还要一个getName方法, 这个方法并不是synchronized方法。所以无论其它线程是否正在运行deposit或者withdraw方法, 都可以随时
+运行getName方法。
+
+一个实例中的synchronized(同步)方法, 只能由一个线程运行, 而非synchronized方法可以由任意数量的线程去执行。
+
+![多个线程运行非synchronized方法getName](#)
+
+上图展示了多个线程同时执行非synchronized方法, 我们在synchronized方法左侧放了一个代表 ***"锁"*** 的长方形来表示。
+当一个线程获取到锁后, 长方形就像筑起来的墙一样, 防止其它线程进入。
+
+下图展示一个线程在执行deposit方法情况。由于该线程获取到了锁, 所以其它线程无法执行该实例中的synchronized方法。
+
+![synchronized方法每次只能由一个线程执行](#)
+
+当一个线程获取到锁后, 我们就将长方形置红, 这表示该锁已经被某个线程获取。但是非synchronized方法
+则完全不受影响。不管线程是否已经获取到锁, 都可以自由进入非synchronized方法。
+

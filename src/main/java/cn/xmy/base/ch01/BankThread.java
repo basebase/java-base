@@ -16,8 +16,10 @@ public class BankThread extends Thread {
 
     @Override
     public void run() {
-        boolean trak = bank.trak(m);
+        bank.deposit(m);
+        System.out.println(Thread.currentThread().getName() + " 存款(" + m + "): " +  " 可用余额: " + bank.getAmount() );
+        boolean trak = bank.withdraw(m);
         int amount = bank.getAmount();
-        System.out.println(Thread.currentThread().getName() + " 取款(" + m + "): " + (trak ? "成功" : "失败") + " 可以余额: " + amount );
+        System.out.println(Thread.currentThread().getName() + " 取款(" + m + "): " + (trak ? "成功" : "失败") + " 可用余额: " + amount );
     }
 }

@@ -7,15 +7,15 @@ package cn.xmy.base.ch01;
  */
 public class Main6 {
     public static void main(String[] args) {
-        Bank bank = new Bank(100, "zs");
+        Bank bank = new Bank(0, "zs");
 
         Thread[] threads = new Thread[20];
-        for (int i = 0; i < 19; i++) {
-            BankThread thread = new BankThread(bank, (i <= 0 ? (i + 1) : i) * 2);
+        for (int i = 0; i < 10; i++) {
+            BankThread thread = new BankThread(bank, (i <= 0 ? (i + 1) : i) * 5);
             threads[i] = thread;
         }
 
-        for (int i = 0; i < 19; i++) {
+        for (int i = 0; i < 10; i++) {
             threads[i].start();
         }
     }
