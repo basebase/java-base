@@ -251,3 +251,28 @@ Bank bank2 = new Bank()
 这两个实例中的synchronized方法可以由不同线程执行。
 
 ![不同实例不同锁](https://github.com/basebase/java-base/blob/master/src/main/java/cn/xmy/base/ch01/%E4%B8%8D%E5%90%8C%E5%AE%9E%E4%BE%8B%E4%B8%8D%E5%90%8C%E9%94%81.png?raw=true)
+
+##### synchronized代码块
+
+如果我们只想让方法中的某一部分由一个线程执行, 而非整个方法。就可以使用synchronized代码块, 使用格式如下
+```text
+synchronized( 表达式 ) {
+  ...
+}
+```
+其中的表达式为锁的实例。也就是我们说的对象实例(Bank对象实例)。synchronized代码块用于精确控制互斥处理的执行范围。
+
+
+***有一点需要注意的是: synchronized静态方法, 使用的不是对象实例, 而是类对象。***
+
+当多个线程执行静态synchronized方法或者synchronized代码块程序, 永远只能有一个线程执行。因为锁的机制不同, 静态方法使用类对象, 非静态方法使用对象实例。
+
+```text
+public static void test() {
+    synchronized(MyThread.clsss) {
+        // ...
+    }
+}
+```
+
+***静态synchronized方法只能有一个线程执行, 非静态synchronized方法可以多个线程去执行, 但必须是不同对象实例***
