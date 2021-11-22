@@ -220,15 +220,34 @@ Bank类还要一个getName方法, 这个方法并不是synchronized方法。所�
 
 一个实例中的synchronized(同步)方法, 只能由一个线程运行, 而非synchronized方法可以由任意数量的线程去执行。
 
-![多个线程运行非synchronized方法getName](#)
+![多个线程运行非synchronized方法getName](https://github.com/basebase/java-base/blob/master/src/main/java/cn/xmy/base/ch01/%E5%A4%9A%E4%B8%AA%E7%BA%BF%E7%A8%8B%E8%BF%90%E8%A1%8C%E9%9D%9Esynchronized%E6%96%B9%E6%B3%95getName.png?raw=true)
 
 上图展示了多个线程同时执行非synchronized方法, 我们在synchronized方法左侧放了一个代表 ***"锁"*** 的长方形来表示。
 当一个线程获取到锁后, 长方形就像筑起来的墙一样, 防止其它线程进入。
 
 下图展示一个线程在执行deposit方法情况。由于该线程获取到了锁, 所以其它线程无法执行该实例中的synchronized方法。
 
-![synchronized方法每次只能由一个线程执行](#)
+![synchronized方法每次只能由一个线程执行](https://github.com/basebase/java-base/blob/master/src/main/java/cn/xmy/base/ch01/synchronized%E6%96%B9%E6%B3%95%E6%AF%8F%E6%AC%A1%E5%8F%AA%E8%83%BD%E7%94%B1%E4%B8%80%E4%B8%AA%E7%BA%BF%E7%A8%8B%E6%89%A7%E8%A1%8C.png?raw=true)
 
 当一个线程获取到锁后, 我们就将长方形置红, 这表示该锁已经被某个线程获取。但是非synchronized方法
 则完全不受影响。不管线程是否已经获取到锁, 都可以自由进入非synchronized方法。
 
+当某个线程结束了synchronized方法, 便会释放锁。可以看到下图中长方形的锁变为白色, 表示锁已经被释放。
+
+![线程执行完synchronized方法释放锁](https://github.com/basebase/java-base/blob/master/src/main/java/cn/xmy/base/ch01/%E7%BA%BF%E7%A8%8B%E6%89%A7%E8%A1%8C%E5%AE%8Csynchronized%E6%96%B9%E6%B3%95%E9%87%8A%E6%94%BE%E9%94%81.png?raw=true)
+
+当锁被释放后, 其它线程便会获取, 但是获取锁的线程只会有一个, 其余的线程只能再次等待, 直到下次线程释放锁。
+
+![获取到锁的线程执行synchronized方法](https://github.com/basebase/java-base/blob/master/src/main/java/cn/xmy/base/ch01/%E8%8E%B7%E5%8F%96%E5%88%B0%E9%94%81%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%89%A7%E8%A1%8Csynchronized%E6%96%B9%E6%B3%95.png?raw=true)
+
+这里有个知识点需要注意: 每个实例对象拥有一个独立的锁, 并不是说某一个实例中的synchronized方法正在执行,
+其它实例中的synchronized方法就不可以执行了。
+
+我们可以创建两个银行实例对象
+```tetx
+Bank bank1 = new Bank()  
+Bank bank2 = new Bank()
+```
+这两个实例中的synchronized方法可以由不同线程执行。
+
+![不同实例不同锁](https://github.com/basebase/java-base/blob/master/src/main/java/cn/xmy/base/ch01/%E4%B8%8D%E5%90%8C%E5%AE%9E%E4%BE%8B%E4%B8%8D%E5%90%8C%E9%94%81.png?raw=true)
