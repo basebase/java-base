@@ -319,3 +319,52 @@ obj.wait()
 
 需要注意的是想要执行wait方法, 线程必须持有锁(这是规定), 如果线程进入等待队列, 便会释放持有锁。
 
+![wait方法](https://github.com/basebase/java-base/blob/master/src/main/java/cn/xmy/base/ch01/wait%E6%96%B9%E6%B3%95.jpg?raw=true)
+
+##### notify方法
+***notify方法会将等待队列中的一个线程唤醒***  
+假设, 我们执行下面的语句
+```text
+obj.notify()
+```
+那么obj等待队列中的一个线程将会被唤醒, 然后会退出等待队列
+
+![notify方法](https://github.com/basebase/java-base/blob/master/src/main/java/cn/xmy/base/ch01/notify%E6%96%B9%E6%B3%95.jpg?raw=true)
+
+同wait方法一样, 想要执行notify方法必须先持有锁, 被notify唤醒的线程并不会立即工作, 因为执行notify方法的线程还持有锁, 所以其它线程无法获取锁实例。
+
+当等待队列中存在多个线程时, notify会如何选择唤醒某个线程, 有可能是随机又或者是wait最长时间的线程又或者是其它策略, 这要取决于Java运行环境。
+所以在编写程序时, 最好不要有依赖特定的线程, 谁也不知道线程一定会被唤醒。
+
+##### notifyAll方法
+***notifyAll方法会将等待队列中的所有线程都唤醒***  
+```text
+obj.notifyAll()
+```
+执行上面的语句后, obj等待队列中的全部线程都会被唤醒。
+
+notify和notifyAll唯一的区别就是, notify只能唤醒一个线程, notifyAll能唤醒全部线程。
+
+![notifyAll方法](https://github.com/basebase/java-base/blob/master/src/main/java/cn/xmy/base/ch01/notifyAll%E6%96%B9%E6%B3%95.jpg?raw=true)
+
+同wait和notify方法一样, notifyAll也需要获取锁才能调用。
+
+同样, 被唤醒的全部线程依旧是无法立即工作的, 它们都需要获取锁, 而当前锁实例是被执行notifyAll线程所持有的, 只有等当前线程释放锁或者调用wait方法
+其它被唤醒的线程去抢被释放的锁才有机会再次运行。
+
+***如果为持有锁线程调用wait、notify、notifyAll方法, 则会抛出异常。***  
+
+
+
+##### wait、notify、notifyAll都是Object方法
+wait、notify、notifyAll都是Object方法, 而不是Thread类固有方法。  
+我们先来回顾一下wait、notify、notifyAll操作:
+* obj.wait(): 将当前线程放入obj的等待队列中
+* obj.notify(): 唤醒obj等待队列中的一个线程
+* obj.notifyAll(): 唤醒obj等待队列中的全部线程
+
+wait、notify、notifyAll这三个方法与其说是针对线程的操作, 倒不如说是针对实例的等待队列操作。由于所有对象实例都有等待队列, 所以也可就称为Object方法。
+
+虽然上面三个方法不是Thread类固有方法, 但由于Object类是所有类的父类, 也可以说上述三个方法是Thread类方法。
+
+
