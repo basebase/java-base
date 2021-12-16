@@ -11,15 +11,15 @@ public class Gate {
     private String address = "Nowhere";
 
     /**
-     * 通过门的类
+     * 通过门的类, 添加synchronized确保只有一个线程执行
      * @param name
      * @param address
      */
-    public void pass(String name, String address) {
+    public synchronized void pass(String name, String address) {
         count ++;
         this.name = name;
         this.address = address;
-        check();
+        check();    // 由于是pass方法调用的check可以保证线程的串行性, 并且还是private修饰, 故check方法不需要增加synchronized
     }
 
     /***
@@ -31,8 +31,13 @@ public class Gate {
         }
     }
 
+    /***
+     * 对于toString方法, 外部多个线程依旧可以调用, 这就会导致A线程在执行pass但是B线程输出了toString方法
+     * 从而导致名称和地址不是对应的。
+     * @return
+     */
     @Override
-    public String toString() {
+    public synchronized String toString() {
         return "No." + count + ": " + name + ", " + address;
     }
 }

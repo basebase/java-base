@@ -20,6 +20,8 @@ public class UserThread extends Thread {
     public void run() {
         while (true) {
             gate.pass(name, address);
+            // 假设这里调用toString方法, 还是会存在脏数据
+            // gate.toString()
         }
     }
 }
