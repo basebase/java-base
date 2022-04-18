@@ -2,14 +2,14 @@ package cn.xmy.base.ch02;
 
 /**
  * @Author xiaomoyu
- * @Date: 2021/12/23 17:52:03
- * @Description:    餐具死锁问题
+ * @Date: 2022/4/12 14:16:26
+ * @Description:
  */
 public class Main3 {
     public static void main(String[] args) {
         Tool spoon = new Tool("Spoon");
         Tool fork = new Tool("Fork");
-        new EaterThread("zhangsan", spoon, fork).start();
-        new EaterThread("lisi", fork, spoon).start();
+        new EaterThread("zs", spoon, fork).start();
+        new EaterThread("ls", fork, spoon).start();
     }
 }

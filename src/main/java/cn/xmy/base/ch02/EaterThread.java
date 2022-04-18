@@ -2,21 +2,21 @@ package cn.xmy.base.ch02;
 
 /**
  * @Author xiaomoyu
- * @Date: 2021/12/23 17:52:42
- * @Description:    左手和右手分别拿起餐具, 开始用餐类
+ * @Date: 2022/4/12 14:17:49
+ * @Description:
  */
 public class EaterThread extends Thread {
     private String name;
-    private final Tool leftHand;
-    private final Tool rightHand;
+    private final Tool leftand;
+    private final Tool righthand;
 
-    public EaterThread(String name, Tool leftHand, Tool rightHand) {
+    public EaterThread(String name, Tool leftand, Tool righthand) {
+        super(name);
         this.name = name;
-        this.leftHand = leftHand;
-        this.rightHand = rightHand;
+        this.leftand = leftand;
+        this.righthand = righthand;
     }
 
-    @Override
     public void run() {
         while (true) {
             try {
@@ -28,32 +28,27 @@ public class EaterThread extends Thread {
     }
 
     public void eat() throws InterruptedException {
-        synchronized (leftHand) {
-            System.out.println(name + " 获取到 " + leftHand + " (left).");
 
-            if (name.equals("zhangsan")) {
-                leftHand.wait();
+//        if (name.equals("zs")) {
+//            Thread.sleep(30);
+//        } else {
+//            Thread.sleep(20);
+//        }
+
+        synchronized (leftand) {
+            System.out.println(name + " 左手获取到" + leftand);
+
+            String currThread = Thread.currentThread().getName();
+
+
+
+            synchronized (righthand) {
+                System.out.println(this.name + " 右手获取到" + righthand);
+                Thread.sleep(20);
+                System.out.println(this.name + " 右手释放" + righthand);
             }
 
-            synchronized (rightHand) {
-                System.out.println(name + " 获取到 " + rightHand + " (right). ");
-                System.out.println(name + " 开始用餐...");
-                System.out.println(name + " 放下右手 " + rightHand + " (right). ");
-
-
-                if (name.equals("lisi")) {
-                    rightHand.wait(500);
-                    rightHand.notifyAll();
-                } else {
-                    rightHand.notifyAll();
-                }
-            }
-
-            if (name.equals("lisi")) {
-                leftHand.wait();
-            }
-
-            System.out.println(name + " 放下左手 " + leftHand + " (left). ");
+            System.out.println(this.name + " 左手释放" + leftand);
         }
     }
 }
