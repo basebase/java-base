@@ -28,6 +28,9 @@ public class Main3 {
         Func<Double, Integer> f = t -> t.intValue() + 1;
         Func<Integer, Double> g = t -> t * 2.0;
 
+        f.compose(g);
+
+
         Function<Double, Integer> f1 = t -> t.intValue() + 1;
         Function<Float, Double> f2 = t -> t * 2.0;
 
